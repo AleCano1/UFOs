@@ -4,33 +4,6 @@ const tableData = data;
 // Reference the HTML table using d3
 var tbody = d3.select("tbody");
 
-//build a table
-//function buildTable(data) {
- //   tbody.html("");
-  //}
-//data is an object that refrences the data being imported
-//for each is the keywordsto create a for loopin JS
-//dataRow is a parameter that will be used as a value
-//when the function is called
- // data.forEach((dataRow) => {
-//});
-
-//It tells JS to find the <tbody> tag within the HTML and add a tablerow("tr")
-//let row = tbody.append("tr");
-
-//with object.values, we're telling JS to reference one object
-//from the arrayof UFO sightings.
-//(dataRow) as argument, we're saying that we want the values to go into the DataRow
-//forEach(val) we specify that we want one objectper row.
-//Object.values(dataRow).forEach((val) => {
-//});
-
-//create a variable to appenddata to table
-//let cell = row.append("td");
-
-//add the values, we are exctracting only the textof the value
-//this value holds only each value fromthe object
-//cell.text(val);
 
 function buildTable(data) {
     // First, clear out any existing data
@@ -51,3 +24,28 @@ function buildTable(data) {
       );
     });
   }
+
+  function handleClick() {
+    // Grab the datetime value from the filter
+    let date = d3.select("#datetime").property("value");
+    let filteredData = tableData;
+  
+     // Check to see if a date was entered and filter the
+    // data using that date.
+    if (date) {
+      // Apply `filter` to the table data to only keep the
+      // rows where the `datetime` value matches the filter value
+      filteredData = filteredData.filter(row => row.datetime === date);
+    }
+  
+     // Rebuild the table using the filtered data
+    // @NOTE: If no date was entered, then filteredData will
+    // just be the original tableData.
+    buildTable(filteredData);
+  }
+  
+  // Attach an event to listen for the form button
+  d3.selectAll("#filter-btn").on("click", handleClick);
+  
+  // Build the table when the page loads
+  buildTable(tableData);
